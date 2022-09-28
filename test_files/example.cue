@@ -1,0 +1,20 @@
+CATALOG 1111111111111
+REM Test Cue file
+PERFORMER "Test Performer"
+TITLE "Test Title"
+FILE "Test File" MP3
+  TRACK 01 AUDIO
+    TITLE "Test 1"
+    PERFORMER "Test Performer"
+    ISRC USSM11111111
+    INDEX 01 00:00:00
+    PREGAP 00:00:00
+    POSTGAP 00:00:00
+  TRACK 02 AUDIO
+    TITLE "Test 2"
+    PERFORMER "Test Performer"
+    INDEX 01 01:99:99
+  TRACK 03 AUDIO
+    TITLE "Test 3"
+    PERFORMER "Test Performer"
+    INDEX 01 11:11:11

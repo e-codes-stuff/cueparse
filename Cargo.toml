@@ -1,0 +1,13 @@
+[package]
+name = "cueparse"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bitflags = "1.3.2"
+pest = "2.3"
+pest_consume = "1.1.3"
+pest_derive = "2.3.0"
+thiserror = "1.0.35"

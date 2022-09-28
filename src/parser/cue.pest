@@ -1,0 +1,145 @@
+cue = {
+    global_section ~ track_list ~ EOI
+}
+
+COMMAND_END = _{
+    NEWLINE+ | EOI
+}
+
+string = @{
+    "\"" ~ (!"\"" ~ ANY)* ~ "\""
+}
+
+integer = @{
+    NUMBER+
+}
+
+msf_time = ${
+    integer ~ ":" ~ integer ~ ":" ~ integer
+}
+
+time = {
+    msf_time
+    |integer
+}
+
+global_section = {
+    (global_property ~ COMMAND_END)+
+}
+
+global_property = {
+    catalog
+    |cd_text_file
+	|file
+    |performer
+    |songwriter
+    |title
+    |rem
+    |arranger
+}
+
+track_list = {
+    track*
+}
+
+track = {
+	(
+        track_command ~ COMMAND_END ~ 
+            (track_property ~ COMMAND_END)*
+    )
+}
+
+track_property = {
+    file
+    |flags
+    |performer
+    |songwriter
+    |title
+    |index
+    |isrc
+    |pregap
+    |postgap
+    |rem
+    |arranger
+}
+
+track_command = {
+    "TRACK" ~ integer ~ track_mode
+}
+
+track_mode = {
+    "AUDIO" | "CDG" | "MODE1/2048" | "MODE1/2352" | "MODE2/2336" | "MODE2/2352" | "CDI/2336" | "CDI/2352"
+}
+
+catalog = {
+    // UPC_EAN adds support for the CDTEXT keyword of the same field
+    ("CATALOG" | "UPC_EAN") ~ catalog_number
+}
+
+// 12 and 13 digits for UPC and EAN codes
+catalog_number = { NUMBER{12, 13} }
+
+cd_text_file = {
+    "CDTEXTFILE" ~ string
+}
+
+file = {
+    "FILE" ~ string ~ file_format?
+}
+
+file_format = {
+    "BINARY" | "MOTOROLA" | "AIFF" | "WAVE" | "MP3"
+}
+
+flags = {
+    "FLAGS" ~ flag+
+}
+
+flag = { "PRE" | "DCP" | "4CH" | "SCMS" }
+
+performer = {
+    "PERFORMER" ~ string
+}
+
+songwriter = {
+    "SONGWRITER" ~ string
+}
+
+title = {
+    "TITLE" ~ string
+}
+
+index = {
+    "INDEX" ~ integer ~ time?
+}
+
+pregap = {
+    "PREGAP" ~ time
+}
+
+postgap = {
+    "POSTGAP" ~ time
+}
+
+isrc = {
+    "ISRC" ~ isrc_code
+}
+
+isrc_code = @{
+    ASCII{2} ~ ASCII{3} ~ NUMBER{2} ~ NUMBER{5}
+}
+
+rem = {
+    "REM" ~ rem_text
+}
+
+rem_text = {
+    (!COMMAND_END ~ ANY)*
+}
+
+// CDTEXT commands
+arranger = {
+    "ARRANGER" ~ string
+}
+
+WHITESPACE = _{ (" " | "\t")+ }
